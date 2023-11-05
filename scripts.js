@@ -9,49 +9,49 @@ const fileInput = document.querySelector(".file-input"),
 	chooseImgBtn = document.querySelector(".choose-img"),
 	saveImgBtn = document.querySelector(".save-img");
 
-let brightness = 100,
-	saturation = 100,
-	inversion = 0,
-	grayscale = 0;
+let brightness = "100",
+	saturation = "100",
+	inversion = "0",
+	grayscale = "0";
 let rotate = 0,
 	flipHorizontal = 1,
 	flipVertical = 1;
-
-const applyFilters = () => {
-	previewImg.style.transform = `rotate(${rotate}deg) scale(${flipHorizontal}, ${flipVertical})`;
-	previewImg.style.filter = `brightness(${brightness}%) saturate(${saturation}%) invert(${inversion}%) grayscale(${grayscale}%)`;
-};
 
 const loadImage = () => {
 	let file = fileInput.files[0];
 	if (!file) return;
 	previewImg.src = URL.createObjectURL(file);
 	previewImg.addEventListener("load", () => {
-        resetFilterBtn.click();
+		resetFilterBtn.click();
 		document.querySelector(".container").classList.remove("disable");
 	});
 };
 
+const applyFilter = () => {
+	previewImg.style.transform = `rotate(${rotate}deg) scale(${flipHorizontal}, ${flipVertical})`;
+	previewImg.style.filter = `brightness(${brightness}%) saturate(${saturation}%) invert(${inversion}%) grayscale(${grayscale}%)`;
+};
+
 filterOptions.forEach((option) => {
 	option.addEventListener("click", () => {
-		document.querySelector(".filter .active").classList.remove("active");
+		document.querySelector(".active").classList.remove("active");
 		option.classList.add("active");
 		filterName.innerText = option.innerText;
 
 		if (option.id === "brightness") {
-			filterSlider.max = 200;
+			filterSlider.max = "200";
 			filterSlider.value = brightness;
 			filterValue.innerText = `${brightness}%`;
 		} else if (option.id === "saturation") {
-			filterSlider.max = 200;
+			filterSlider.max = "200";
 			filterSlider.value = saturation;
 			filterValue.innerText = `${saturation}%`;
 		} else if (option.id === "inversion") {
-			filterSlider.max = 100;
+			filterSlider.max = "100";
 			filterSlider.value = inversion;
 			filterValue.innerText = `${inversion}%`;
 		} else {
-			filterSlider.max = 100;
+			filterSlider.max = "100";
 			filterSlider.value = grayscale;
 			filterValue.innerText = `${grayscale}%`;
 		}
@@ -71,7 +71,7 @@ const updateFilter = () => {
 	} else {
 		grayscale = filterSlider.value;
 	}
-	applyFilters();
+	applyFilter();
 };
 
 rotateOptions.forEach((option) => {
@@ -85,20 +85,20 @@ rotateOptions.forEach((option) => {
 		} else {
 			flipVertical = flipVertical === 1 ? -1 : 1;
 		}
-		applyFilters();
+		applyFilter();
 	});
 });
 
 const resetFilter = () => {
-	brightness = 100;
-	saturation = 100;
-	inversion = 0;
-	grayscale = 0;
+	brightness = "100";
+	saturation = "100";
+	inversion = "0";
+	grayscale = "0";
 	rotate = 0;
 	flipHorizontal = 1;
 	flipVertical = 1;
 	filterOptions[0].click();
-	applyFilters();
+	applyFilter();
 };
 
 const saveImage = () => {
@@ -106,6 +106,7 @@ const saveImage = () => {
 	const ctx = canvas.getContext("2d");
 	canvas.width = previewImg.naturalWidth;
 	canvas.height = previewImg.naturalHeight;
+
 	ctx.filter = `brightness(${brightness}%) saturate(${saturation}%) invert(${inversion}%) grayscale(${grayscale}%)`;
 	ctx.translate(canvas.width / 2, canvas.height / 2);
 	if (rotate !== 0) {
@@ -119,10 +120,11 @@ const saveImage = () => {
 		canvas.width,
 		canvas.height
 	);
-    const link = document.createElement("a");
-    link.download = "edited-image.png";
-    link.href = canvas.toDataURL();
-    link.click();
+
+	const link = document.createElement("a");
+	link.download = "image.jpg";
+	link.href = canvas.toDataURL();
+	link.click();
 };
 
 filterSlider.addEventListener("input", updateFilter);
